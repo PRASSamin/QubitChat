@@ -1,5 +1,5 @@
-import type { DeepPartial, Theme } from "stream-chat-expo";
-import { hexThemes } from "./Theme";
+import type {DeepPartial, Theme} from "stream-chat-expo";
+import {hexThemes} from "./Theme";
 
 const _LightTheme: DeepPartial<Theme> = {
   colors: {
@@ -40,7 +40,8 @@ const _DarkTheme: DeepPartial<Theme> = {
     black: "#fff",
     white_snow: hexThemes.dark.background,
     white: hexThemes.dark.muted,
-    grey_whisper: hexThemes.dark.border
+    grey_whisper: hexThemes.dark.border,
+    targetedMessageBackground: hexThemes.dark.muted,
   },
 };
 
@@ -72,7 +73,7 @@ const Colors = {
   shadow_icon: '#00000040', // 40 = 25% opacity; x=0, y=0, radius=4
   static_black: '#000000',
   static_white: '#ffffff',
-  targetedMessageBackground: '#FBF4DD', // dark mode = #302D22
+  targetedMessageBackground: '#302D22', // dark mode = #302D22
   text_high_emphasis: '#080707',
   text_low_emphasis: '#7E828B',
   transparent: 'transparent',

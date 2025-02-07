@@ -1,8 +1,17 @@
-import {TouchableOpacity, TouchableOpacityProps, Vibration, View} from "react-native";
+import {Linking, TouchableOpacity, Vibration, View} from "react-native";
 import React, {useEffect, useState} from "react";
 import {useLocalSearchParams} from "expo-router";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Channel, MessageInput, MessageList, MessageType, Thread, useChatContext} from "stream-chat-expo";
+import {
+  type AudioRecordingButtonProps,
+  Channel,
+  MessageInput,
+  MessageList,
+  MessageType,
+  SendButtonProps,
+  Thread,
+  useChatContext
+} from "stream-chat-expo";
 import {type Channel as StreamChannel} from "stream-chat";
 import {LoadingIndicator} from "@/src/components/LoadingIndicator";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -38,6 +47,7 @@ const ChatBoxScreen = () => {
     <SafeAreaView className="flex-1">
       <View>
         <Channel
+            asyncMessagesMinimumPressDuration={100}
             asyncMessagesMultiSendEnabled audioRecordingEnabled
             StartAudioRecordingButton={({...props}) => <Voice {...props}/>}
             FileAttachmentIcon={({size}) => <MaterialIcons name="insert-drive-file" size={size} />} threadList={!!thread} thread={thread} channel={activeChannel}>
@@ -46,7 +56,7 @@ const ChatBoxScreen = () => {
           ) : (
             <>
               <MessageList onThreadSelect={setThread} />
-              <MessageInput />
+              <MessageInput SendButton={({...props}) => <SendButton {...props} />} />
             </>
           )}
         </Channel>
@@ -58,11 +68,14 @@ const ChatBoxScreen = () => {
 export default ChatBoxScreen;
 
 
-const SendButton: React.FC<TouchableOpacityProps> = ({ onPress, ...props }) => {
+const SendButton: React.FC<SendButtonProps> = ({ ...props }) => {
   console.log(props)
+  const Send = async () => {
+    await props.sendMessage!()
+  }
   return (
       <TouchableOpacity
-          onPress={onPress}
+          onPress={Send}
           activeOpacity={0.7}
           accessibilityLabel="Send Message"
           {...props}
@@ -72,16 +85,45 @@ const SendButton: React.FC<TouchableOpacityProps> = ({ onPress, ...props }) => {
   );
 };
 
-const Voice = ({...props}) => {
-  const {showAlert} = useAlert()
-  console.log(props)
-  return <TouchableOpacity onPress={() => {
-    Vibration.vibrate(50);
-    showAlert({
-      title: "Warning",
-      message: "Please Hold The Button",
-      buttonText: "Got It",
-      onConfirm: () => console.log("Alert Confirmed!"),
-    })
-  }} onLongPress={props.startVoiceRecording} {...props}><MaterialIcons name="keyboard-voice" size={24} color="blue"/></TouchableOpacity>
-}
+const Voice: React.FC<AudioRecordingButtonProps> = React.memo(({ ...props }) => {
+  const { Alert } = useAlert();
+
+  const checkPermissions = () => {
+    if (!props.permissionsGranted) {
+      Alert({
+        title: "Warning",
+        message: "Please allow Audio permissions in settings.",
+        buttonText: "Open Settings",
+        onConfirm: () => {
+          Linking.openSettings();
+        },
+      });
+      return false;
+    }
+    return true;
+  };
+
+  return (
+      <TouchableOpacity
+          onPress={() => {
+            Vibration.vibrate(50);
+            if (checkPermissions()) {
+              Alert({
+                title: "Warning",
+                message: "Please Hold to start recording.",
+                buttonText: "Got It",
+              });
+            }
+          }}
+          delayLongPress={100}
+          onLongPress={() => {
+            if (checkPermissions()) {
+              props.startVoiceRecording!();
+            }
+          }}
+          {...props}
+      >
+        <MaterialIcons name="keyboard-voice" size={30} color="gray" />
+      </TouchableOpacity>
+  );
+});
