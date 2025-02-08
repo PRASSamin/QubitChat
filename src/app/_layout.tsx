@@ -1,14 +1,15 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import "./global.css";
-import {useFonts} from "expo-font";
-import {Slot, SplashScreen} from "expo-router";
-import {ClerkLoaded, ClerkProvider} from "@clerk/clerk-expo";
-import {CLERKPUBKEY} from "@/src/core/constants/keys";
-import {tokenCache} from "../core/utils/cache";
-import {ThemeProvider} from "@/src/core/providers/ThemeProvider";
-import {StatusBar} from "react-native";
-import {GestureHandlerRootView} from "react-native-gesture-handler";
-import {AlertProvider} from "@/src/core/providers/AlertProvider";
+import { useFonts } from "expo-font";
+import { Slot, SplashScreen } from "expo-router";
+import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
+import { CLERKPUBKEY } from "@/src/core/constants/keys";
+import { tokenCache } from "@/src/core/utils/cache";
+import { ThemeProvider } from "@/src/core/providers/ThemeProvider";
+import { StatusBar } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AlertProvider } from "@/src/core/providers/AlertProvider";
+import { ThemeProvider as StreamThemeProvider } from "stream-chat-expo";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,27 +37,29 @@ const RootLayout = () => {
   }
 
   return (
-      <AlertProvider>
-        <GestureHandlerRootView className="flex-1">
-        <ThemeProvider>
-          <ClerkProvider
+    <AlertProvider>
+      <GestureHandlerRootView className="flex-1">
+        <StreamThemeProvider>
+          <ThemeProvider>
+            <ClerkProvider
               signInUrl="/sign-in"
               tokenCache={tokenCache}
               publishableKey={CLERKPUBKEY}
-          >
-            <ClerkLoaded>
-              <StatusBar
+            >
+              <ClerkLoaded>
+                <StatusBar
                   translucent
                   className="bg-background"
                   showHideTransition={"fade"}
                   animated
-              />
-              <Slot/>
-            </ClerkLoaded>
-          </ClerkProvider>
-        </ThemeProvider>
+                />
+                <Slot />
+              </ClerkLoaded>
+            </ClerkProvider>
+          </ThemeProvider>
+        </StreamThemeProvider>
       </GestureHandlerRootView>
-      </AlertProvider>
+    </AlertProvider>
   );
 };
 
