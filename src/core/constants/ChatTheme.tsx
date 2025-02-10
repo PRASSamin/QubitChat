@@ -1,5 +1,5 @@
-import type { DeepPartial, Theme } from "stream-chat-expo";
-import { hexThemes } from "./Theme";
+import type {DeepPartial, Theme} from "stream-chat-expo";
+import {hexThemes} from "./Theme";
 
 const _LightTheme: DeepPartial<Theme> = {
   colors: {
@@ -42,6 +42,7 @@ const _DarkTheme: DeepPartial<Theme> = {
     white: hexThemes.dark.muted,
     grey_whisper: hexThemes.dark.border,
     targetedMessageBackground: hexThemes.dark.muted,
+    light_gray: hexThemes.dark.muted,
   },
   messageInput: {
     replyContainer: {
@@ -50,9 +51,47 @@ const _DarkTheme: DeepPartial<Theme> = {
     },
   },
   messageSimple: {
-    gallery: {},
+    gallery: {
+      imageContainer: {
+        flexWrap: "wrap", // Ensure proper alignment
+        padding: 10,
+      },
+      image: {
+        borderRadius: 10, // Fix overflow issues
+      },
+    },
+    unreadUnderlayColor: hexThemes.dark.background, // unread message underlay background color
   },
-  
+  attachmentSelectionBar: {
+    container: {
+      backgroundColor: hexThemes.dark.muted, // attachment selection bar background color
+    }
+  },
+  attachmentPicker: {
+    imageOverlaySelectedComponent: {
+      check: {
+        backgroundColor:hexThemes.dark.muted // selected image checked icon background color
+      }
+    },
+    bottomSheetContentContainer: {
+      backgroundColor: hexThemes.dark.muted
+    }
+  },
+  bottomSheetModal: { // TODO: remove this part
+    container:{
+      backgroundColor:hexThemes.dark.muted
+    },
+    contentContainer:{
+      backgroundColor:hexThemes.dark.muted
+    },
+    overlay: {
+      backgroundColor:hexThemes.dark.muted
+    },
+    handle:{
+      backgroundColor:hexThemes.dark.muted
+    }
+  }
+
 };
 
 const Colors = {

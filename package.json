@@ -18,13 +18,14 @@
     "@clerk/clerk-expo": "^2.7.0",
     "@clerk/types": "^4.44.1",
     "@expo/vector-icons": "^14.0.2",
+    "@qeepsake/react-native-images-collage": "^3.3.6",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "expo": "^52.0.28",
     "expo-av": "~15.0.2",
     "expo-blur": "^14.0.3",
-    "expo-clipboard": "~7.0.1",
+    "expo-clipboard": "^7.0.1",
     "expo-constants": "~17.0.5",
     "expo-device": "~7.0.2",
     "expo-document-picker": "^13.0.3",
@@ -35,7 +36,6 @@
     "expo-image-picker": "^16.0.5",
     "expo-linear-gradient": "~14.0.2",
     "expo-linking": "~7.0.5",
-    "expo-media-library": "^17.0.5",
     "expo-navigation-bar": "^4.0.7",
     "expo-notifications": "~0.29.13",
     "expo-permissions": "^14.4.0",
@@ -61,7 +61,7 @@
     "react-native-svg": "^15.11.1",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "stream-chat-expo": "^6.4.1"
+    "stream-chat-expo": "^6.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

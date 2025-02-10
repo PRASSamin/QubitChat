@@ -1,15 +1,15 @@
-import { ActivityIndicator, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Chat, OverlayProvider, useTheme } from "stream-chat-expo";
-import { useUser } from "@clerk/clerk-expo";
-import { type TokenOrProvider } from "stream-chat";
-import { StreamClient as client } from "@/src/core/constants/instances";
-import { useColorScheme } from "nativewind";
-import { ChatTheme } from "@/src/core/constants/ChatTheme";
-import { Redirect } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {ActivityIndicator, View} from "react-native";
+import React, {useEffect, useState} from "react";
+import {Chat, OverlayProvider, useTheme} from "stream-chat-expo";
+import {useUser} from "@clerk/clerk-expo";
+import {type TokenOrProvider} from "stream-chat";
+import {StreamClient as client} from "@/src/core/constants/instances";
+import {useColorScheme} from "nativewind";
+import {ChatTheme} from "@/src/core/constants/ChatTheme";
+import {Redirect} from "expo-router";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { hexThemes } from "../constants/Theme";
+import {PickerProps} from "../types";
 
 const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -62,9 +62,10 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <OverlayProvider
-      ImageSelectorIcon={({ selectedPicker }) => (
-        <ImagesIcon selectedPicker={selectedPicker} />
-      )}
+      ImageSelectorIcon={() => <PickerIcons selectedPicker="images" />}
+      FileSelectorIcon={() => <PickerIcons selectedPicker="file" />}
+      CameraSelectorIcon={() => <PickerIcons selectedPicker="camera" />}
+      VideoRecorderSelectorIcon={() => <PickerIcons selectedPicker="video" />}
       AttachmentPickerIOSSelectMorePhotos={() => {
         return null;
       }}
@@ -86,21 +87,31 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export default ChatProvider;
 
-type PickerProps = {
-  selectedPicker?: "images";
-};
-
-const ImagesIcon: React.FC<PickerProps> = React.memo(({ selectedPicker }) => {
+const PickerIcons: React.FC<PickerProps> = React.memo(({ selectedPicker }) => {
   const {
-    theme: {
-      colors: { accent_blue },
-    },
+    theme: { colors },
   } = useTheme();
+
+  const Icon = (): keyof typeof Ionicons.glyphMap => {
+    switch (selectedPicker) {
+      case "images":
+        return "images";
+      case "file":
+        return "file-tray-stacked";
+      case "camera":
+        return "camera";
+      case "video":
+        return "videocam";
+      default:
+        return "images";
+    }
+  };
+
   return (
     <Ionicons
-      name="images"
+      name={Icon()}
       size={24}
-      // color={selectedPicker === "images" ? hexThemes  : grey}
+      color={selectedPicker === "images" ? colors.accent_blue : colors.grey}
     />
   );
 });
