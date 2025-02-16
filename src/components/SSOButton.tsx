@@ -1,8 +1,15 @@
-import {ActivityIndicator, StyleSheet, Text, TouchableOpacity,} from "react-native";
-import React, {useCallback, useState} from "react";
-import {AuthProviderType} from "@/src/core/types";
-import {useOAuth, useUser} from "@clerk/clerk-expo";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import React, { useCallback, useState } from "react";
+import { AuthProviderType } from "@/src/core/types";
+import { useOAuth, useUser } from "@clerk/clerk-expo";
 import * as Linking from "expo-linking";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 const SSOButton = ({
   provider,

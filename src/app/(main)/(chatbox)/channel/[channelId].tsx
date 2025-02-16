@@ -1,11 +1,11 @@
-import {View} from "react-native";
-import React, {useEffect, useState} from "react";
-import {useLocalSearchParams} from "expo-router";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {Channel} from "@/src/components/Stream/Channel";
-import {MessageInput, MessageList, useChatContext} from "stream-chat-expo";
-import {type Channel as StreamChannelType} from "stream-chat";
-import {LoadingIndicator} from "@/src/components/LoadingIndicator";
+import { View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Channel } from "@/src/components/Stream/Channel";
+import { MessageInput, MessageList, useChatContext } from "stream-chat-expo";
+import { type Channel as StreamChannelType } from "stream-chat";
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
 import ChannelHeader from "@/src/components/Stream/ChannelHeader";
 
 const ChatBoxScreen = () => {
@@ -14,6 +14,7 @@ const ChatBoxScreen = () => {
     null
   );
   const { client } = useChatContext();
+  console.log(channelId);
 
   useEffect(() => {
     const fetchChannel = async () => {
@@ -36,9 +37,7 @@ const ChatBoxScreen = () => {
       <View className="flex-1 flex-col">
         <Channel channel={activeChannel}>
           <ChannelHeader channel={activeChannel} />
-          <MessageList
-            additionalFlatListProps={{ bounces: true }}
-          />
+          <MessageList additionalFlatListProps={{ bounces: true }} />
           <MessageInput />
         </Channel>
       </View>

@@ -1,97 +1,192 @@
-import type {DeepPartial, Theme} from "stream-chat-expo";
-import {hexThemes} from "./Theme";
+import type { DeepPartial, MarkdownStyle, Theme } from "stream-chat-expo";
+import { hexThemes } from "./Theme";
+import { ThemeType } from "../types";
 
-const _LightTheme: DeepPartial<Theme> = {
-  colors: {
-    black: "#000000",
-  },
+const _Markdown = (scheme?: ThemeType): DeepPartial<MarkdownStyle> => {
+  const {
+    primary,
+    muted,
+    mutedForeground,
+    primaryForeground,
+    accentForeground,
+    foreground,
+    border,
+    destructive,
+    accent,
+    secondary,
+  } = hexThemes[scheme || "light"];
+  return {
+    autolink: {
+      color: accent,
+      textDecorationLine: "underline",
+    },
+    blockQuoteBar: { backgroundColor: border, width: 4 },
+    blockQuoteSection: {
+      backgroundColor: muted,
+      padding: 10,
+    },
+    blockQuoteSectionBar: { backgroundColor: border },
+    blockQuoteText: {
+      color: mutedForeground,
+      fontStyle: "italic",
+    },
+    br: { height: 10 },
+    codeBlock: {
+      backgroundColor: muted,
+      color: foreground,
+      padding: 10,
+      borderRadius: 5,
+      fontFamily: "monospace",
+    },
+    del: {
+      textDecorationLine: "line-through",
+      color: destructive,
+    },
+    em: { fontStyle: "italic", color: foreground },
+    heading: { fontWeight: "bold", color: foreground },
+    heading1: { fontSize: 24 },
+    heading2: { fontSize: 22 },
+    heading3: { fontSize: 20 },
+    heading4: { fontSize: 18 },
+    heading5: { fontSize: 16 },
+    heading6: { fontSize: 14 },
+    hr: {
+      borderBottomWidth: 1,
+      borderBottomColor: border,
+      marginVertical: 10,
+    },
+    image: { borderRadius: 8 },
+    inlineCode: {
+      backgroundColor: muted,
+      color: foreground,
+      padding: 4,
+      borderRadius: 4,
+      fontFamily: "monospace",
+    },
+    list: { marginVertical: 5 },
+    listItem: { flexDirection: "row", alignItems: "center" },
+    listItemBullet: { color: primary, fontSize: 16 },
+    listItemNumber: { color: primary, fontSize: 16 },
+    listItemText: { color: foreground },
+    listRow: { marginVertical: 5 },
+    mailTo: {
+      color: accentForeground,
+      textDecorationLine: "underline",
+    },
+    mentions: { color: secondary, fontWeight: "bold" },
+    newline: { height: 10 },
+    noMargin: { margin: 0 },
+    paragraph: { color: foreground, marginVertical: 5 },
+    paragraphCenter: { textAlign: "center" },
+    paragraphWithImage: { flexDirection: "row", alignItems: "center" },
+    strong: { fontWeight: "bold", color: foreground },
+    sublist: { paddingLeft: 10 },
+    table: { borderWidth: 1, borderColor: border },
+    tableHeader: { backgroundColor: muted },
+    tableHeaderCell: {
+      fontWeight: "bold",
+      color: foreground,
+      padding: 5,
+    },
+    tableRow: {
+      backgroundColor: muted + "80",
+      borderBottomWidth: 1,
+      borderBottomColor: border,
+    },
+    tableRowCell: { padding: 5, color: foreground },
+    tableRowLast: { borderBottomWidth: 0 },
+    text: { color: foreground },
+    u: { textDecorationLine: "underline", color: primary },
+  };
 };
 
-const _DarkTheme: DeepPartial<Theme> = {
-  // channelPreview: {
-  //   container: {
-  //     backgroundColor: hexThemes.dark.background,
-  //     height: "100%",
-  //   },
-  // },
-  // channelListMessenger: {
-  //   flatList: {
-  //     backgroundColor: hexThemes.dark.background,
-  //   },
-  //   flatListContent: {
-  //     backgroundColor: hexThemes.dark.background,
-  //   },
-  // },
-  // channelListSkeleton: {
-  //   container: {
-  //     backgroundColor: hexThemes.dark.background,
-  //     height: "100%",
-  //   },
-  //   background: {
-  //     backgroundColor: hexThemes.dark.background,
-  //   },
-  // },
-  // channelListLoadingIndicator: {
-  //   container: {
-  //     backgroundColor: hexThemes.dark.background,
-  //   }
-  // },
-  colors: {
-    black: "#fff",
-    white_snow: hexThemes.dark.background,
-    white: hexThemes.dark.muted,
-    grey_whisper: hexThemes.dark.border,
-    targetedMessageBackground: hexThemes.dark.muted,
-    light_gray: hexThemes.dark.muted,
-  },
-  messageInput: {
-    replyContainer: {
-      paddingBottom: 0,
-      paddingHorizontal: 0,
+const _Theme = (scheme?: ThemeType): DeepPartial<Theme> => {
+  const {
+    background,
+    muted,
+    border,
+    accent,
+    foreground,
+    mutedForeground,
+    deepMuted,
+  } = hexThemes[scheme || "light"];
+  return {
+    colors: {
+      black: foreground,
+      white_snow: background,
+      white: deepMuted,
+      grey_whisper: scheme === "dark" ? border : mutedForeground + "50",
+      targetedMessageBackground: muted,
+      light_gray: muted,
+      light_blue: accent + "60",
+      code_block: muted,
+      grey_gainsboro: "transparent",
+      accent_blue: accent, // indicators, icons,
+      blue_alice: accent + "60", // card,
+      transparent: "transparent",
+      border: border,
+      accent_red: accent,
+      overlay: scheme === "dark" ? "#ffffffCC" : "#000000CC",
+      // test
+      bg_gradient_end: "red",
+      bg_gradient_start: "navy",
+      bg_user: "gold",
+      label_bg_transparent: "azure", // 33 = 20% opacity
+      modal_shadow: "aqua", // 99 = 60% opacity; x=0, y= 1, radius=4
+      shadow_icon: "gold", // 40 = 25% opacity; x=0, y=0, radius=4
+      text_high_emphasis: "violet",
+      text_low_emphasis: "yellow",
+      white_smoke: muted,
     },
-  },
-  messageSimple: {
-    gallery: {
-      imageContainer: {
-        flexWrap: "wrap", // Ensure proper alignment
-        padding: 10,
-      },
-      image: {
-        borderRadius: 10, // Fix overflow issues
+    messageInput: {
+      replyContainer: {
+        paddingBottom: 0,
+        paddingHorizontal: 0,
       },
     },
-    unreadUnderlayColor: hexThemes.dark.background, // unread message underlay background color
-  },
-  attachmentSelectionBar: {
-    container: {
-      backgroundColor: hexThemes.dark.muted, // attachment selection bar background color
-    }
-  },
-  attachmentPicker: {
-    imageOverlaySelectedComponent: {
-      check: {
-        backgroundColor:hexThemes.dark.muted // selected image checked icon background color
-      }
+    messageSimple: {
+      gallery: {
+        image: {
+          borderRadius: 10, // Fix overflow issues
+        },
+        moreImagesContainer: {
+          margin: 0,
+        },
+      },
+      unreadUnderlayColor: background,
+      content: {
+        markdown: _Markdown(scheme),
+      },
+      reactionListTop: {
+        container: {
+          backgroundColor: scheme === "dark" ? "#161616" : "#c5c5c5",
+          top: -10,
+        },
+      },
     },
-    bottomSheetContentContainer: {
-      backgroundColor: hexThemes.dark.muted
-    }
-  },
-  bottomSheetModal: { // TODO: remove this part
-    container:{
-      backgroundColor:hexThemes.dark.muted
+    attachmentSelectionBar: {
+      container: {
+        backgroundColor: muted, // attachment selection bar background color
+      },
     },
-    contentContainer:{
-      backgroundColor:hexThemes.dark.muted
+    attachmentPicker: {
+      imageOverlaySelectedComponent: {
+        check: {
+          backgroundColor: muted, // selected image checked icon background color
+        },
+      },
+      bottomSheetContentContainer: {
+        backgroundColor: muted,
+      },
     },
-    overlay: {
-      backgroundColor:hexThemes.dark.muted
+    imageGallery: {
+      footer: {
+        imageCountText: {
+          display: "none",
+        },
+      },
     },
-    handle:{
-      backgroundColor:hexThemes.dark.muted
-    }
-  }
-
+  };
 };
 
 const Colors = {
@@ -131,5 +226,5 @@ const Colors = {
   white_snow: "#FCFCFC",
 };
 
-export const ChatTheme = (scheme?: string): DeepPartial<Theme> =>
-  scheme === "dark" ? _DarkTheme : _LightTheme;
+export const ChatTheme = (scheme?: ThemeType): DeepPartial<Theme> =>
+  _Theme(scheme);

@@ -1,15 +1,18 @@
-import {useUser} from "@clerk/clerk-expo";
-import {View} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { useUser } from "@clerk/clerk-expo";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import PRAS from "@/src/components/svg/Pras";
-import {useColorScheme} from "nativewind";
+import { useColorScheme } from "nativewind";
 import Wordmark from "@/src/components/svg/Wordmark";
-import {ChannelList, useTheme} from "stream-chat-expo";
-import {useRouter} from "expo-router";
-import {LoadingIndicator} from "@/src/components/LoadingIndicator";
-import {Collage} from "@/src/components/Collage";
-import {getMatrix} from "@/src/core/utils/metrix";
-import {getChannelMemberAvatars, getChannelMemberList,} from "@/src/core/utils/stream";
+import { ChannelList, useTheme } from "stream-chat-expo";
+import { useRouter } from "expo-router";
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import { Collage } from "@/src/components/Collage";
+import { getMatrix } from "@/src/core/utils/metrix";
+import {
+  getChannelMemberAvatars,
+  getChannelMemberList,
+} from "@/src/core/utils/stream";
 
 const ChatHome = () => {
   const { user } = useUser();

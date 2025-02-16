@@ -3,13 +3,15 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
-import {hslTohex} from "@/src/core/utils/hslTohex";
-import {vars} from "nativewind";
+import { hslTohex } from "@/src/core/utils/hslTohex";
+import { vars } from "nativewind";
+import { ThemeProps, ThemeType } from "../types";
 
 const lightColorScheme = {
   "--background": "190 66% 100%",
   "--foreground": "190 53% 2%",
   "--muted": "160 13% 93%",
+  "--deep-muted": "160 13% 93%",
   "--muted-foreground": "160 12% 38%",
   "--popover": "190 66% 100%",
   "--popover-foreground": "190 53% 2%",
@@ -38,6 +40,7 @@ const darkColorScheme = {
   "--background": "190 41% 1%",
   "--foreground": "190 34% 100%",
   "--muted": "160 13% 7%",
+  "--deep-muted": "210 20% 8%",
   "--muted-foreground": "160 12% 62%",
   "--popover": "190 41% 1%",
   "--popover-foreground": "190 34% 100%",
@@ -67,7 +70,7 @@ export const themes = {
   dark: vars(darkColorScheme),
 };
 
-export const hexThemes = {
-  light: hslTohex(lightColorScheme),
-  dark: hslTohex(darkColorScheme),
+export const hexThemes: Record<ThemeType, ThemeProps> = {
+  light: hslTohex(lightColorScheme) as ThemeProps,
+  dark: hslTohex(darkColorScheme) as ThemeProps,
 };

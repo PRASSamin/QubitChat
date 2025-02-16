@@ -1,6 +1,6 @@
-import React from "react";
+// package imports
+import React, { useMemo } from "react";
 import { useAlert } from "@/src/core/hooks/useAlert";
-import { MaterialIcons } from "@expo/vector-icons";
 import { Linking, Text, TouchableOpacity, Vibration, View } from "react-native";
 import {
   AudioRecordingButtonProps,
@@ -11,6 +11,14 @@ import {
   useTranslationContext,
   type ChannelProps,
 } from "stream-chat-expo";
+
+// local imports
+import { getDateString } from "@/src/core/utils/dateString";
+import { MaterialIcon } from "../Icons/EV/MaterialIcon";
+import { MessageSimple } from "./MessageSimple";
+import { Gallery } from "./Gallery";
+import { MessageContent } from "./MessageContent";
+import { Reply } from "./Reply";
 
 // Stream Channel Component Config
 export const Channel: React.FC<ChannelProps & { children: React.ReactNode }> =
@@ -23,7 +31,22 @@ export const Channel: React.FC<ChannelProps & { children: React.ReactNode }> =
         asyncMessagesMultiSendEnabled
         audioRecordingEnabled
         StartAudioRecordingButton={({ ...props }) => <Voice {...props} />}
-        // Other
+        // MessageList Controls
+        MessageSimple={MessageSimple}
+        Gallery={Gallery}
+        MessageContent={MessageContent}
+        giphyEnabled={false}
+        CommandsButton={() => null}
+        InlineDateSeparator={({ date }) => {
+          const dateString = useMemo(() => getDateString(date!), [date]);
+          return (
+            <View className="w-full flex items-center justify-center">
+              <Text className="text-foreground bg-muted rounded-full text-sm px-3 py-1">
+                {dateString}
+              </Text>
+            </View>
+          );
+        }}
         loadingMore={true}
         enforceUniqueReaction={true}
         allowThreadMessagesInChannel={false}
@@ -39,13 +62,9 @@ export const Channel: React.FC<ChannelProps & { children: React.ReactNode }> =
             ? [quotedReply, markUnread, copyMessage]
             : [quotedReply, editMessage, copyMessage, deleteMessage]
         }
-        messageContentOrder={["text", "gallery", "files", "attachments"]}
-        Reply={() => {
-          return null;
-        }}
-        DateHeader={() => {
-          return null;
-        }}
+        Reply={Reply}
+        DateHeader={() => null}
+        // MessageInput Controls
         InputReplyStateHeader={({ ...props }) => {
           return <ReplyHeader {...props} />;
         }}
@@ -96,7 +115,7 @@ const Voice: React.FC<AudioRecordingButtonProps> = React.memo(
         }}
         {...props}
       >
-        <MaterialIcons name="keyboard-voice" size={30} color="gray" />
+        <MaterialIcon name="keyboard-voice" size={30} color="gray" />
       </TouchableOpacity>
     );
   }

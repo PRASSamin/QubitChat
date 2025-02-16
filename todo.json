@@ -1,0 +1,16 @@
+[
+  {
+    "instruction": "add this config in eas.json before eas build ( notifee )",
+    "config": {
+      "build": {
+        "dev": {
+          "developmentClient": true,
+          "distribution": "internal",
+          "android": {
+            "image": "ubuntu-18.04-jdk-11-ndk-r19c"
+          }
+        }
+      }
+    }
+  }
+]

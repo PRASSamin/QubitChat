@@ -1,33 +1,22 @@
-import {Button, Switch, Text, View} from "react-native";
-import React, {useCallback, useState} from "react";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { Button, Switch, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import {useTheme} from "@/src/core/hooks/useTheme";
-import * as Notifications from "expo-notifications";
+import { useTheme } from "@/src/core/hooks/useTheme";
+import { useAuth } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
 
 const Settings = () => {
   const { theme, setTheme } = useTheme();
   const [isEnabled, setIsEnabled] = useState(theme === "dark");
+  const { signOut } = useAuth();
+  const router = useRouter();
 
   const toggleSwitch = useCallback(() => {
     const newTheme = !isEnabled ? "dark" : "light";
     setIsEnabled((prevState) => !prevState);
     setTheme(newTheme);
   }, [isEnabled, setTheme]);
-
-  const TestNotification = async () => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "You've got mail! 📬",
-        body: "Here is the notification body",
-        data: { data: "goes here", test: { test1: "more data" } },
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: 2,
-      },
-    });
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-background w-full h-full px-2">
@@ -62,8 +51,13 @@ const Settings = () => {
             />
           </View>
         </View>
-        <Button onPress={TestNotification} title="Send"></Button>
       </View>
+      <Button
+        onPress={() => {
+          signOut({ redirectUrl: "/sign-in" });
+        }}
+        title="Logout"
+      ></Button>
     </SafeAreaView>
   );
 };

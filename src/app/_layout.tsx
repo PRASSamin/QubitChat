@@ -47,12 +47,7 @@ const RootLayout = () => {
               publishableKey={CLERKPUBKEY}
             >
               <ClerkLoaded>
-                <StatusBar
-                  translucent
-                  className="bg-background"
-                  showHideTransition={"fade"}
-                  animated
-                />
+                <StatusBar className="bg-background" />
                 <Slot />
               </ClerkLoaded>
             </ClerkProvider>

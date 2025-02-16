@@ -1,15 +1,22 @@
-import {ActivityIndicator, View} from "react-native";
-import React, {useEffect, useState} from "react";
-import {Chat, OverlayProvider, useTheme} from "stream-chat-expo";
-import {useUser} from "@clerk/clerk-expo";
-import {type TokenOrProvider} from "stream-chat";
-import {StreamClient as client} from "@/src/core/constants/instances";
-import {useColorScheme} from "nativewind";
-import {ChatTheme} from "@/src/core/constants/ChatTheme";
-import {Redirect} from "expo-router";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import {PickerProps} from "../types";
+import { View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Chat, OverlayProvider, Streami18n, useTheme } from "stream-chat-expo";
+import { useUser } from "@clerk/clerk-expo";
+import { type TokenOrProvider } from "stream-chat";
+import { StreamClient as client } from "@/src/core/constants/instances";
+import { useColorScheme } from "nativewind";
+import { ChatTheme } from "@/src/core/constants/ChatTheme";
+import { Redirect } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { PickerProps } from "../types";
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import { IonIcon } from "@/src/components/Icons/EV/IonIcon";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const streami18n = new Streami18n({
+  language: "en",
+});
 
 const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -18,23 +25,21 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isClientReady, setIsClientReady] = useState(false);
   const { colorScheme } = useColorScheme();
   const [chatTheme, setChatTheme] = useState(ChatTheme(colorScheme));
-  const { bottom, top } = useSafeAreaInsets();
-
-  if (!user) {
-    return <Redirect href={"/sign-in"} />;
-  }
+  const { top, bottom } = useSafeAreaInsets();
 
   useEffect(() => {
     setChatTheme(ChatTheme(colorScheme));
   }, [colorScheme]);
 
-  const userObj = {
-    id: user.id,
-    name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-    image: user.imageUrl,
-  };
-
   useEffect(() => {
+    if (!user) return;
+
+    const userObj = {
+      id: user.id,
+      name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+      image: user.imageUrl,
+    };
+
     const connectUser = async () => {
       try {
         await client.connectUser(
@@ -54,10 +59,14 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       setIsClientReady(false);
     };
-  }, [user.id]);
+  }, [user?.id]);
+
+  if (!user) {
+    return <Redirect href={"/sign-in"} />;
+  }
 
   if (!isClientReady) {
-    return <ActivityIndicator className="flex-1" />;
+    return <LoadingIndicator />;
   }
 
   return (
@@ -66,18 +75,19 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
       FileSelectorIcon={() => <PickerIcons selectedPicker="file" />}
       CameraSelectorIcon={() => <PickerIcons selectedPicker="camera" />}
       VideoRecorderSelectorIcon={() => <PickerIcons selectedPicker="video" />}
+      i18nInstance={streami18n}
       AttachmentPickerIOSSelectMorePhotos={() => {
         return null;
       }}
       AttachmentPickerBottomSheetHandle={() => {
         return (
-          <View className="h-5 rounded-t-2xl bg-muted flex items-center justify-center">
+          <View className="h-5  bg-muted flex items-center justify-center">
             <View className="h-1 w-20 bg-muted-foreground rounded-full"></View>
           </View>
         );
       }}
-      bottomInset={bottom}
       topInset={top}
+      bottomInset={bottom}
       value={{ style: chatTheme }}
     >
       <Chat client={client}>{children}</Chat>
@@ -108,7 +118,7 @@ const PickerIcons: React.FC<PickerProps> = React.memo(({ selectedPicker }) => {
   };
 
   return (
-    <Ionicons
+    <IonIcon
       name={Icon()}
       size={24}
       color={selectedPicker === "images" ? colors.accent_blue : colors.grey}
