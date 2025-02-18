@@ -1,63 +1,25 @@
-import { Button, Switch, Text, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useTheme } from "@/src/core/hooks/useTheme";
-import { useAuth } from "@clerk/clerk-expo";
-import { useRouter } from "expo-router";
+import ProfileSection from "@/src/components/Settings/ProfileSection";
+import PreferencesSection from "@/src/components/Settings/PreferencesSection";
+import AccountSection from "@/src/components/Settings/AccountSection";
+import { Text, View } from "react-native";
+import SupportSection from "@/src/components/Settings/SupportSection";
 
 const Settings = () => {
-  const { theme, setTheme } = useTheme();
-  const [isEnabled, setIsEnabled] = useState(theme === "dark");
-  const { signOut } = useAuth();
-  const router = useRouter();
-
-  const toggleSwitch = useCallback(() => {
-    const newTheme = !isEnabled ? "dark" : "light";
-    setIsEnabled((prevState) => !prevState);
-    setTheme(newTheme);
-  }, [isEnabled, setTheme]);
-
   return (
-    <SafeAreaView className="flex-1 bg-background w-full h-full px-2">
-      <View>
-        <Text className="text-muted-foreground font-medium text-lg">
-          Preferences
-        </Text>
-        <View className="mt-3 flex-col">
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center gap-3">
-              <MaterialCommunityIcons
-                name="theme-light-dark"
-                size={20}
-                color="white"
-                className="bg-indigo-600 rounded-full p-2"
-              />
-              <View className="flex-col">
-                <Text className="text-foreground font-medium text-lg">
-                  Dark Mode
-                </Text>
-                <Text className="text-muted-foreground text-sm">
-                  Change theme
-                </Text>
-              </View>
-            </View>
-            <Switch
-              trackColor={{ false: "#d1d1d1", true: "#4CAF50" }}
-              thumbColor={isEnabled ? "#ffffff" : "#f1f1f1"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
-        </View>
+    <SafeAreaView className="flex-1 bg-background w-full h-full justify-between px-2.5">
+      <View className="flex-1">
+        <ProfileSection />
+        <PreferencesSection />
+        <AccountSection />
+        <SupportSection />
       </View>
-      <Button
-        onPress={() => {
-          signOut({ redirectUrl: "/sign-in" });
-        }}
-        title="Logout"
-      ></Button>
+      <View>
+        <Text className="text-muted-foreground text-center text-sm opacity-50 pb-4 font-Poppins-400">
+          Version: 1.0
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };

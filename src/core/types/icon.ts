@@ -4,6 +4,7 @@ import {
   Ionicons,
   AntDesign,
   FontAwesome,
+  Feather,
 } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
 
@@ -21,3 +22,7 @@ export interface ExpoAntIconType
 
 export interface ExpoFAIconType
   extends IconProps<keyof (typeof FontAwesome)["glyphMap"]> {}
+
+
+export interface ExpoFeatherIconType
+  extends IconProps<keyof (typeof Feather)["glyphMap"]> {}

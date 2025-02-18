@@ -83,11 +83,14 @@ const Voice: React.FC<AudioRecordingButtonProps> = React.memo(
     const checkPermissions = () => {
       if (!props.permissionsGranted) {
         Alert({
-          title: "Warning",
-          message: "Please allow Audio permissions in settings.",
-          buttonText: "Open Settings",
-          onConfirm: () => {
-            Linking.openSettings();
+          which: "alert",
+          alert: {
+            title: "Warning",
+            message: "Please allow Audio permissions in settings.",
+            buttonText: "Open Settings",
+            onConfirm: () => {
+              Linking.openSettings();
+            },
           },
         });
         return false;
@@ -101,9 +104,12 @@ const Voice: React.FC<AudioRecordingButtonProps> = React.memo(
           Vibration.vibrate(50);
           if (checkPermissions()) {
             Alert({
-              title: "Warning",
-              message: "Please Hold to start recording.",
-              buttonText: "Got It",
+              which: "alert",
+              alert: {
+                title: "Warning",
+                message: "Please Hold to start recording.",
+                buttonText: "Got It",
+              },
             });
           }
         }}

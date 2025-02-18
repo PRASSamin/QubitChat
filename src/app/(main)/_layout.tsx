@@ -9,7 +9,7 @@ const MainScreenLayout = () => {
     <AppProvider>
       <ChatProvider>
         <NotificationProvider>
-          <Slot />
+        <Slot />
         </NotificationProvider>
       </ChatProvider>
     </AppProvider>

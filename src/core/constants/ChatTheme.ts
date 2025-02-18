@@ -127,15 +127,6 @@ const _Theme = (scheme?: ThemeType): DeepPartial<Theme> => {
       border: border,
       accent_red: accent,
       overlay: scheme === "dark" ? "#ffffffCC" : "#000000CC",
-      // test
-      bg_gradient_end: "red",
-      bg_gradient_start: "navy",
-      bg_user: "gold",
-      label_bg_transparent: "azure", // 33 = 20% opacity
-      modal_shadow: "aqua", // 99 = 60% opacity; x=0, y= 1, radius=4
-      shadow_icon: "gold", // 40 = 25% opacity; x=0, y=0, radius=4
-      text_high_emphasis: "violet",
-      text_low_emphasis: "yellow",
       white_smoke: muted,
     },
     messageInput: {
@@ -184,6 +175,11 @@ const _Theme = (scheme?: ThemeType): DeepPartial<Theme> => {
         imageCountText: {
           display: "none",
         },
+      },
+    },
+    reply: {
+      container: {
+        display: "none",
       },
     },
   };

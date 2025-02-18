@@ -106,11 +106,14 @@ const ChannelHeader: React.FC<ChannelProps> = ({ channel }) => {
             activeOpacity={0.6}
             onPress={() => {
               Alert({
-                title: "Invite",
-                message: inviteLink,
-                buttonText: "Copy",
-                onConfirm() {
-                  copyToClipboard(inviteLink);
+                which: "alert",
+                alert: {
+                  title: "Invite",
+                  message: inviteLink,
+                  buttonText: "Copy",
+                  onConfirm() {
+                    copyToClipboard(inviteLink);
+                  },
                 },
               });
             }}

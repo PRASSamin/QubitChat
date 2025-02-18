@@ -14,7 +14,6 @@ const ChatBoxScreen = () => {
     null
   );
   const { client } = useChatContext();
-  console.log(channelId);
 
   useEffect(() => {
     const fetchChannel = async () => {

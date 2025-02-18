@@ -11,9 +11,15 @@ import * as BackgroundFetch from "expo-background-fetch";
 import { getLocalUser } from "./src/core/utils/getLocalUser";
 import { EstablishSocket } from "./src/core/tasks/EstablishSocket";
 import "@/src/core/tasks/EstablishSocket";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Background notification handler
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  const userPreferences = await AsyncStorage.getItem(
+    "userNotificationPreference"
+  );
+  if (userPreferences === "false") return;
+
   const user = await getLocalUser();
   if (!user) return;
 

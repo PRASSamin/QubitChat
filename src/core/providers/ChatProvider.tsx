@@ -12,7 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { PickerProps } from "../types";
 import { LoadingIndicator } from "@/src/components/LoadingIndicator";
 import { IonIcon } from "@/src/components/Icons/EV/IonIcon";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const streami18n = new Streami18n({
   language: "en",

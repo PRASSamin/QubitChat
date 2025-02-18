@@ -115,3 +115,5 @@ __pycache__
 # build
 /android
 /ios
+
+.env

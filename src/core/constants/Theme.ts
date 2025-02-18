@@ -5,7 +5,8 @@
 
 import { hslTohex } from "@/src/core/utils/hslTohex";
 import { vars } from "nativewind";
-import { ThemeProps, ThemeType } from "../types";
+import { ThemeType } from "../types";
+import { ThemeProps } from "../types/color";
 
 const lightColorScheme = {
   "--background": "190 66% 100%",
