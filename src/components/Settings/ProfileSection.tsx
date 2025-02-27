@@ -11,6 +11,7 @@ import { Spinner } from "../Spinner";
 import { ButtonActionParams, ValueChangeParams } from "@/src/core/types/alert";
 import { User } from "@/src/core/types";
 import { Image, Pressable, Text, View } from "react-native";
+import { pushUserToLocalStorage } from "@/src/core/utils/pushUserToLocal";
 
 const ProfileSection = () => {
   const { user } = useUser();
@@ -71,8 +72,8 @@ const ProfileSection = () => {
       }
 
       try {
-        const user = await getUser({ username: [text] });
-        if (user?.length! > 0) {
+        const users = await getUser({ username: [text] });
+        if (users?.length! > 0) {
           setErrors(["Username not available"]);
         } else {
           setErrors([]);
@@ -294,7 +295,10 @@ const UpdateUserName: React.FC<ButtonActionParams & { user: User }> = ({
   return (
     <Pressable
       disabled={
-        isUpdating || !data?.username || data?.username === user?.username
+        isUpdating ||
+        !data?.username ||
+        data?.username === user?.username ||
+        data?.username.length <= 3
       }
       onPress={handleUpdate}
       style={{ backgroundColor: accent + "60" }}
@@ -332,6 +336,7 @@ const UpdateName: React.FC<ButtonActionParams & { user: User }> = ({
         firstName: data?.firstName,
         lastName: data?.lastName,
       });
+      pushUserToLocalStorage(user as User);
       hideModel();
     } catch (err: unknown) {
       if (err instanceof Error) {

@@ -1,5 +1,4 @@
-import { View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Chat, OverlayProvider, Streami18n, useTheme } from "stream-chat-expo";
 import { useUser } from "@clerk/clerk-expo";
 import { type TokenOrProvider } from "stream-chat";
@@ -12,10 +11,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { PickerProps } from "../types";
 import { LoadingIndicator } from "@/src/components/LoadingIndicator";
 import { IonIcon } from "@/src/components/Icons/EV/IonIcon";
+import { useRouter } from "expo-router";
 
-const streami18n = new Streami18n({
-  language: "en",
-});
+const streami18n = new Streami18n({ language: "en" });
 
 const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -25,43 +23,69 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   const { colorScheme } = useColorScheme();
   const [chatTheme, setChatTheme] = useState(ChatTheme(colorScheme));
   const { top, bottom } = useSafeAreaInsets();
+  const router = useRouter();
 
   useEffect(() => {
     setChatTheme(ChatTheme(colorScheme));
   }, [colorScheme]);
 
   useEffect(() => {
-    if (!user) return;
+    if (user && !user.publicMetadata.chatToken) {
+      user.reload();
+    }
+  }, [user?.publicMetadata.chatToken]);
+
+  useEffect(() => {
+    if (!user || !user?.publicMetadata.chatToken) return;
 
     const userObj = {
-      id: user.id,
-      name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-      image: user.imageUrl,
+      id: user?.id,
+      name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
+      image: user?.imageUrl,
     };
 
     const connectUser = async () => {
       try {
+        if (client.userID && client.userID !== user.id) {
+          await client.disconnectUser();
+        }
         await client.connectUser(
           userObj,
           user.publicMetadata.chatToken as TokenOrProvider
         );
         setIsClientReady(true);
       } catch (err) {
-        console.error("Failed to connect user:", err);
+        console.log("Failed to connect user:", err);
       }
     };
+
     connectUser();
 
     return () => {
       if (isClientReady) {
         client.disconnectUser();
+        setIsClientReady(false);
       }
-      setIsClientReady(false);
     };
-  }, [user?.id]);
+  }, [user?.publicMetadata.chatToken]);
+
+  useEffect(() => {
+    if (!client) return;
+
+    const handleEvent = (event: any) => {
+      console.log("all", JSON.stringify(event, null, 2));
+      router.reload();
+    };
+
+    client.on("all", handleEvent);
+
+    return () => {
+      client.off("all", handleEvent);
+    };
+  }, [client, router]);
 
   if (!user) {
-    return <Redirect href={"/sign-in"} />;
+    return <Redirect href="/sign-in" />;
   }
 
   if (!isClientReady) {
@@ -75,16 +99,6 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
       CameraSelectorIcon={() => <PickerIcons selectedPicker="camera" />}
       VideoRecorderSelectorIcon={() => <PickerIcons selectedPicker="video" />}
       i18nInstance={streami18n}
-      AttachmentPickerIOSSelectMorePhotos={() => {
-        return null;
-      }}
-      AttachmentPickerBottomSheetHandle={() => {
-        return (
-          <View className="h-5  bg-muted flex items-center justify-center">
-            <View className="h-1 w-20 bg-muted-foreground rounded-full"></View>
-          </View>
-        );
-      }}
       topInset={top}
       bottomInset={bottom}
       value={{ style: chatTheme }}
@@ -101,7 +115,7 @@ const PickerIcons: React.FC<PickerProps> = React.memo(({ selectedPicker }) => {
     theme: { colors },
   } = useTheme();
 
-  const Icon = (): keyof typeof Ionicons.glyphMap => {
+  const iconName: keyof typeof Ionicons.glyphMap = useMemo(() => {
     switch (selectedPicker) {
       case "images":
         return "images";
@@ -114,11 +128,11 @@ const PickerIcons: React.FC<PickerProps> = React.memo(({ selectedPicker }) => {
       default:
         return "images";
     }
-  };
+  }, [selectedPicker]);
 
   return (
     <IonIcon
-      name={Icon()}
+      name={iconName}
       size={24}
       color={selectedPicker === "images" ? colors.accent_blue : colors.grey}
     />

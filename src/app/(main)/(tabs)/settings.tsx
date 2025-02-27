@@ -5,6 +5,7 @@ import PreferencesSection from "@/src/components/Settings/PreferencesSection";
 import AccountSection from "@/src/components/Settings/AccountSection";
 import { Text, View } from "react-native";
 import SupportSection from "@/src/components/Settings/SupportSection";
+import { metadata } from "@/meta";
 
 const Settings = () => {
   return (
@@ -17,7 +18,7 @@ const Settings = () => {
       </View>
       <View>
         <Text className="text-muted-foreground text-center text-sm opacity-50 pb-4 font-Poppins-400">
-          Version: 1.0
+          Version: {metadata.version}
         </Text>
       </View>
     </SafeAreaView>

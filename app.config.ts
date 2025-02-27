@@ -2,24 +2,24 @@ import { ExpoConfig } from "expo/config";
 import { metadata } from "./meta";
 
 export default (): ExpoConfig => ({
-  name: metadata.name,
-  slug: metadata.slug,
+  name: "Qubit Chat",
+  slug: "qubitchat",
   primaryColor: "#00d5ff",
-  githubUrl: metadata.repository?.url,
-  version: metadata.version,
+  githubUrl: "https://github.com/PRASSamin/qubitchat",
+  version: "1.0.0",
   sdkVersion: "52.0.0",
   orientation: "portrait",
   icon: "./src/assets/images/pictorialmark.png",
-  scheme: metadata.slug,
+  scheme: "qubitchat",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
-  platforms: metadata.platforms,
+  platforms: ["android"],
   ios: {
-    bundleIdentifier: metadata.package,
+    bundleIdentifier: "com.pras.qubitchat",
     googleServicesFile: "./GoogleService-Info-qubitchat.plist",
   },
   android: {
-    package: metadata.package,
+    package: "com.pras.qubitchat",
     googleServicesFile: "./google-services-qubitchat.json",
     permissions: [
       // 📢 Microphone for voice messages & calls

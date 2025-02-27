@@ -1,12 +1,15 @@
 import { AppMetadata } from "./src/core/types/metadata";
+import * as c from "./app.config";
+
+const config = c.default();
 
 const metadata: AppMetadata = {
-  name: "Qubit Chat",
-  package: "com.pras.qubitchat",
-  slug: "qubitchat",
-  version: "1.0.0",
+  name: config.name,
+  package: config.android?.package,
+  slug: config.slug,
+  version: config.version,
   supportEmail: "prassamin@gmail.com",
-  platforms: ["android"],
+  platforms: config.platforms as AppMetadata["platforms"],
   author: {
     name: "PRAS Samin",
     email: "prassamin@gmail.com",
@@ -17,7 +20,7 @@ const metadata: AppMetadata = {
   },
   repository: {
     type: "git",
-    url: "https://github.com/PRASSamin/qubitchat",
+    url: config.githubUrl,
   },
 };
 

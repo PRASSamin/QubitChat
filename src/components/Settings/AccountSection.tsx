@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FeatherIcon } from "../Icons/EV/FeatherIcon";
 import { useAuth } from "@clerk/clerk-expo";
-import { Spinner } from "../Spinner";
 import { MaterialIcon } from "../Icons/EV/MaterialIcon";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AccountSection = () => {
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
@@ -18,6 +18,7 @@ const AccountSection = () => {
             onPress={async () => {
               setIsLoggingOut(true);
               await signOut();
+              await AsyncStorage.removeItem("user");
               setIsLoggingOut(false);
             }}
             className="flex-row items-center justify-between"

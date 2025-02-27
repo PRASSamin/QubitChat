@@ -11,7 +11,7 @@ export interface AppMetadata extends Record<string, unknown> {
      */
     name: string;
     slug: string;
-    version: string;
+    version?: string;
     description?: string;
     releaseDate?: string;
     lastUpdated?: string;
