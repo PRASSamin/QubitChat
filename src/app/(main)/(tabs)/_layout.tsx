@@ -1,5 +1,4 @@
 import { Tabs } from "expo-router";
-import { useUsername } from "@/src/core/hooks/useUsername";
 import { Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { hexThemes } from "@/src/core/constants/Theme";
@@ -8,7 +7,6 @@ import { useEffect } from "react";
 import { requestNotificationPermission } from "@/src/core/utils/permissions";
 
 export default function Layout() {
-  const { isLoaded, username } = useUsername();
   const { colorScheme } = useColorScheme();
   const theme = hexThemes[colorScheme || "light"];
 

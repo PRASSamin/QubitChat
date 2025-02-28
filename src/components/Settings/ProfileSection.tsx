@@ -47,7 +47,7 @@ const ProfileSection = () => {
         const base64Image = `data:image/jpeg;base64,${pickerResult.assets[0].base64}`;
         await user?.setProfileImage({ file: base64Image });
       } catch (err) {
-        console.error(err);
+        console.log(err);
       } finally {
         setIsImageUploading(false);
       }
@@ -332,15 +332,15 @@ const UpdateName: React.FC<ButtonActionParams & { user: User }> = ({
     if (isUpdating) return;
     setUpdating(true);
     try {
-      await user.update({
+      const updatedUser = await user.update({
         firstName: data?.firstName,
         lastName: data?.lastName,
       });
-      pushUserToLocalStorage(user as User);
+      pushUserToLocalStorage(updatedUser as User);
       hideModel();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error("Update failed:", err.message);
+        console.log("Update failed:", err.message);
       }
       setErrors(["Something went wrong. Please try again."]);
     } finally {

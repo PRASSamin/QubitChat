@@ -6,8 +6,6 @@ import { pushUserToLocalStorage } from "../utils/pushUserToLocal";
 import { User } from "../types";
 
 export const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { isSignedIn, user } = useUser();
-
   const preLoadIcons = async () => {
     await Asset.loadAsync([
       require("@expo/vector-icons/AntDesign"),
@@ -21,12 +19,6 @@ export const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     preLoadIcons();
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      pushUserToLocalStorage(user as User);
-    }
-  }, [isSignedIn]);
 
   return <>{children}</>;
 };

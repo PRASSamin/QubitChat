@@ -24,7 +24,7 @@ const ChannelHeader: React.FC<ChannelProps> = ({ channel }) => {
     string[] | null
   >(null);
   const [inviteLink] = useState<string>(
-    `https://pras.me/${channel?.data?.metadata?.inviteToken}`
+    `${process.env.EXPO_PUBLIC_WEB_URL}/${channel?.data?.metadata?.inviteToken}`
   );
 
   const { user } = useUser();
@@ -96,12 +96,13 @@ const ChannelHeader: React.FC<ChannelProps> = ({ channel }) => {
           </Text>
         </View>
         <View className="flex flex-row items-center gap-5">
-          <TouchableOpacity activeOpacity={0.6}>
+          {/* <TouchableOpacity activeOpacity={0.6}>
             <Ionicons name="call" size={22} color={accent_blue} />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.6}>
             <Ionicons name="videocam" size={22} color={accent_blue} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          {/* TODO: plan for future features */}
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
