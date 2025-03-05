@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { Appearance, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "nativewind";
@@ -41,7 +41,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <View style={themes[theme]} className="flex-1">
+      <View style={themes[theme]} className="flex-1 bg-background">
         {children}
       </View>
     </ThemeContext.Provider>

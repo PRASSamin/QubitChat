@@ -24,7 +24,8 @@ const ChannelHeader: React.FC<ChannelProps> = ({ channel }) => {
     string[] | null
   >(null);
   const [inviteLink] = useState<string>(
-    `https://pras.me/${channel?.data?.metadata?.inviteToken}`
+    // @ts-ignore
+    `${process.env.EXPO_PUBLIC_WEB_URL}/chat/invite/${channel?.data?.metadata?.inviteToken}`
   );
 
   const { user } = useUser();
@@ -65,7 +66,10 @@ const ChannelHeader: React.FC<ChannelProps> = ({ channel }) => {
         className="h-20 flex flex-row items-center justify-between gap-3 px-6 py-2"
       >
         <View className="flex flex-row items-center gap-3">
-          <TouchableOpacity onPress={() => router.push("/(main)/(tabs)")}>
+          <TouchableOpacity
+            onPress={() => router.push("/(main)/(tabs)")}
+            hitSlop={2}
+          >
             <Ionicons
               className="mr-3"
               name="arrow-back-outline"
@@ -96,13 +100,15 @@ const ChannelHeader: React.FC<ChannelProps> = ({ channel }) => {
           </Text>
         </View>
         <View className="flex flex-row items-center gap-5">
-          <TouchableOpacity activeOpacity={0.6}>
+          {/* <TouchableOpacity activeOpacity={0.6}>
             <Ionicons name="call" size={22} color={accent_blue} />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.6}>
             <Ionicons name="videocam" size={22} color={accent_blue} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          {/* TODO: plan for future features */}
           <TouchableOpacity
+            hitSlop={2}
             activeOpacity={0.6}
             onPress={() => {
               Alert({

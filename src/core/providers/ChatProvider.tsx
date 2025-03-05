@@ -8,10 +8,12 @@ import { ChatTheme } from "@/src/core/constants/ChatTheme";
 import { Redirect } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { PickerProps } from "../types";
-import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import { PickerProps, User } from "../types";
 import { IonIcon } from "@/src/components/Icons/EV/IonIcon";
 import { useRouter } from "expo-router";
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import { getLocalUser } from "../utils/getLocalUser";
+import { pushUserToLocalStorage } from "../utils/pushUserToLocal";
 
 const streami18n = new Streami18n({ language: "en" });
 
@@ -21,30 +23,54 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   const { user } = useUser();
   const [isClientReady, setIsClientReady] = useState(false);
   const { colorScheme } = useColorScheme();
-  const [chatTheme, setChatTheme] = useState(ChatTheme(colorScheme));
   const { top, bottom } = useSafeAreaInsets();
   const router = useRouter();
+  const [refreshKey, setRefreshKey] = useState(0);
 
+  // Poll for chatToken until available
   useEffect(() => {
-    setChatTheme(ChatTheme(colorScheme));
-  }, [colorScheme]);
+    if (!user || user.publicMetadata.chatToken) return;
 
-  useEffect(() => {
-    if (user && !user.publicMetadata.chatToken) {
-      user.reload();
-    }
+    const pollForToken = async () => {
+      const interval = setInterval(async () => {
+        try {
+          await user.reload();
+          if (user.publicMetadata.chatToken) {
+            clearInterval(interval);
+          }
+        } catch (err) {
+          console.log("Error reloading user:", err);
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    };
+
+    pollForToken();
+
+    return () => {};
   }, [user?.publicMetadata.chatToken]);
 
+  // Connect to Stream Chat once chatToken is available
   useEffect(() => {
     if (!user || !user?.publicMetadata.chatToken) return;
 
     const userObj = {
-      id: user?.id,
-      name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
-      image: user?.imageUrl,
+      id: user.id,
+      name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+      image: user.imageUrl,
     };
 
     const connectUser = async () => {
+      const localUser = await getLocalUser();
+      if (
+        !localUser?.chatToken ||
+        localUser?.chatToken !== user.publicMetadata.chatToken
+      ) {
+        await pushUserToLocalStorage(user as User);
+      }
+
       try {
         if (client.userID && client.userID !== user.id) {
           await client.disconnectUser();
@@ -63,24 +89,24 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
 
     return () => {
       if (isClientReady) {
-        client.disconnectUser();
+        client.disconnectUser().catch(console.log);
         setIsClientReady(false);
       }
     };
   }, [user?.publicMetadata.chatToken]);
 
+  // Event listener
   useEffect(() => {
     if (!client) return;
 
     const handleEvent = (event: any) => {
-      console.log("all", JSON.stringify(event, null, 2));
-      router.reload();
+      setRefreshKey((prev) => prev + 1);
     };
 
-    client.on("all", handleEvent);
+    client.on("notification.added_to_channel", handleEvent);
 
     return () => {
-      client.off("all", handleEvent);
+      client.off("notification.added_to_channel", handleEvent);
     };
   }, [client, router]);
 
@@ -94,6 +120,7 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <OverlayProvider
+      key={refreshKey}
       ImageSelectorIcon={() => <PickerIcons selectedPicker="images" />}
       FileSelectorIcon={() => <PickerIcons selectedPicker="file" />}
       CameraSelectorIcon={() => <PickerIcons selectedPicker="camera" />}
@@ -101,7 +128,7 @@ const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
       i18nInstance={streami18n}
       topInset={top}
       bottomInset={bottom}
-      value={{ style: chatTheme }}
+      value={{ style: ChatTheme(colorScheme) }}
     >
       <Chat client={client}>{children}</Chat>
     </OverlayProvider>

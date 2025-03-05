@@ -100,6 +100,7 @@ const Voice: React.FC<AudioRecordingButtonProps> = React.memo(
 
     return (
       <TouchableOpacity
+        hitSlop={2}
         onPress={() => {
           Vibration.vibrate(50);
           if (checkPermissions()) {
@@ -162,6 +163,7 @@ const ReplyHeader = ({ ...props }) => {
           {t<string>("Reply to Message")}
         </Text>
         <TouchableOpacity
+          hitSlop={2}
           onPress={() => {
             if (resetInput) {
               resetInput();

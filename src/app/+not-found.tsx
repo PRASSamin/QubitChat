@@ -1,26 +1,28 @@
-import { Link, Stack } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+import { FeatherIcon } from "../components/Icons/EV/FeatherIcon";
 
-export default function NotFoundScreen() {
+const NotFoundScreen = () => {
+  const router = useRouter();
+
   return (
-    <>
-      <Stack.Screen options={{ title: "Oops!" }} />
-      <View>
-        <Text>This screen doesn't exist.</Text>
-      </View>
-    </>
+    <View className="flex-1 items-center justify-center bg-background px-6">
+      <FeatherIcon name="alert-triangle" size={64} color={"#f43f5e"} />
+      <Text className="text-2xl font-bold text-foreground mt-4">
+        Page Not Found
+      </Text>
+      <Text className="text-muted-foreground text-center mt-2">
+        Oops! The page you are looking for doesn’t exist or has been moved.
+      </Text>
+      <TouchableOpacity
+        onPress={() => router.replace("/")}
+        activeOpacity={0.8}
+        className="mt-6 px-6 py-3 bg-accent rounded-[5px]"
+      >
+        <Text className="text-white font-semibold">Go Home</Text>
+      </TouchableOpacity>
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});
+export default NotFoundScreen;

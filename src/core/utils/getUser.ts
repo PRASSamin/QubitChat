@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CLERKSECRET } from "../constants/keys";
-import { User, UserQueryParams } from "../types/userQuery";
+import { User, UserQueryParams } from "../types/clerk";
 import { prepareUrl } from "./prepareUrl";
 
 /**
@@ -20,7 +20,7 @@ export const getUser = async (
 
     return data;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.log("Error fetching user:", error);
     return null;
   }
 };

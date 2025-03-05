@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./global.css";
-import { useFonts } from "expo-font";
-import { Slot, SplashScreen } from "expo-router";
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
 import { CLERKPUBKEY } from "@/src/core/constants/keys";
 import { tokenCache } from "@/src/core/utils/cache";
@@ -10,35 +8,60 @@ import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AlertProvider } from "@/src/core/providers/AlertProvider";
 import { ThemeProvider as StreamThemeProvider } from "stream-chat-expo";
+import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  useFonts,
+} from "@expo-google-fonts/poppins";
+import * as SplashScreen from "expo-splash-screen";
+import NetInfo from "@react-native-community/netinfo";
+import NoInternetScreen from "../components/NoInternet";
+import { Slot } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({
+  fade: true,
+});
 
 const RootLayout = () => {
-  const [loaded, error] = useFonts({
-    "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
-    "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
-    "Poppins-ExtraLight": require("../assets/fonts/Poppins-ExtraLight.ttf"),
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
-    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
-    "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
+  const [loaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
   });
+  const [isConnected, setIsConnected] = useState(true);
+
+  const checkConnection = async () => {
+    const state = await NetInfo.fetch();
+    setIsConnected(state.isInternetReachable ?? false);
+  };
 
   useEffect(() => {
-    if (loaded || error) {
+    if (loaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, error]);
+  }, [loaded]);
 
-  if (!loaded && !error) {
-    return null;
+  useEffect(() => {
+    if (loaded) {
+      const unsubscribe = NetInfo.addEventListener((state) => {
+        setIsConnected(state.isInternetReachable ?? false);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [loaded]);
+
+  if (!isConnected) {
+    return <NoInternetScreen onRetry={checkConnection} />;
   }
 
   return (
     <AlertProvider>
-      <GestureHandlerRootView className="flex-1">
+      <GestureHandlerRootView className="flex-1 bg-background">
         <StreamThemeProvider>
           <ThemeProvider>
             <ClerkProvider

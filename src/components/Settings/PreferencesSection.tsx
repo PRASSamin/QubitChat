@@ -1,7 +1,6 @@
 import { Pressable, Switch, Text, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTheme } from "@/src/core/hooks/useTheme";
-import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useNotifications } from "@/src/core/hooks/useNotifications";
 import { MaterialIcon } from "@/src/components/Icons/EV/MaterialIcon";
 
@@ -24,6 +23,7 @@ const PreferencesSection = () => {
       <View className="flex felx-col gap-4">
         <View className="flex-col">
           <Pressable
+            hitSlop={2}
             onPress={toggleSwitch}
             className="flex-row items-center justify-between"
           >
@@ -54,6 +54,7 @@ const PreferencesSection = () => {
         </View>
         <View className="flex-col">
           <Pressable
+            hitSlop={2}
             onPress={() => setUserPreference(!userPreference)}
             className="flex-row items-center justify-between"
           >

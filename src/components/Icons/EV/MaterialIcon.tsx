@@ -6,6 +6,7 @@ const MaterialIcon: React.FC<ExpoMatIconType> = React.memo(
   ({ name, size, color, className, ...props }) => {
     return Object.keys(MaterialCommunityIcons.glyphMap).includes(name) ? (
       <MaterialCommunityIcons
+        // @ts-ignore
         name={name}
         size={size || 20}
         color={color || "white"}
@@ -14,6 +15,7 @@ const MaterialIcon: React.FC<ExpoMatIconType> = React.memo(
       />
     ) : (
       <MaterialIcons
+        // @ts-ignore
         name={name}
         size={size || 20}
         color={color || "white"}

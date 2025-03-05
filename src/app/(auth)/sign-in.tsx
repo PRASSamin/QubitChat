@@ -1,13 +1,13 @@
 import React from "react";
 import * as WebBrowser from "expo-web-browser";
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
-import {AntDesign, FontAwesome} from "@expo/vector-icons";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {LinearGradient} from "expo-linear-gradient";
-import {useColorScheme} from "nativewind";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import { useColorScheme } from "nativewind";
 // Local imports
-import {onBoarding} from "@/src/core/constants/Images";
-import {hexThemes} from "@/src/core/constants/Theme";
+import { onBoarding } from "@/src/core/constants/Images";
+import { hexThemes } from "@/src/core/constants/Theme";
 import SSOButton from "@/src/components/SSOButton";
 // Type definition for auth providers
 
@@ -46,7 +46,7 @@ export default function SignInScreen() {
         <View className="flex-1 px-5">
           <View style={styles.imageContainer}>
             <Image
-              source={onBoarding}
+              source={{ uri: onBoarding }}
               style={styles.image}
               alt="onboarding"
               fadeDuration={500}

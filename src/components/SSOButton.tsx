@@ -37,7 +37,7 @@ const SSOButton = ({
           await user?.reload();
         }
       } catch (err) {
-        console.error("SSO Error:", JSON.stringify(err, null, 2));
+        console.log("SSO Error:", JSON.stringify(err, null, 2));
       } finally {
         setIsLoading(null);
       }

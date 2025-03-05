@@ -1,5 +1,9 @@
 import { ExpoConfig } from "expo/config";
-import { metadata } from "./meta";
+
+const pictorialmark =
+  "https://cidxhvsaxjndcogbdgav.supabase.co/storage/v1/object/sign/PRAS/qubitchat/adaptive-pictorialmark.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJQUkFTL3F1Yml0Y2hhdC9hZGFwdGl2ZS1waWN0b3JpYWxtYXJrLnBuZyIsImlhdCI6MTc0MTA4NzQ0MSwiZXhwIjoyMDU2NDQ3NDQxfQ.CRnD3nNRzgeagg2oT59OEm0meBbNZHhdoE_cNOaxOTE";
+const splash =
+  "https://cidxhvsaxjndcogbdgav.supabase.co/storage/v1/object/sign/PRAS/qubitchat/splash-pictorialmark.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJQUkFTL3F1Yml0Y2hhdC9zcGxhc2gtcGljdG9yaWFsbWFyay5wbmciLCJpYXQiOjE3NDEwODUzMDcsImV4cCI6MjA1NjQ0NTMwN30.uSoSHg_xlal3i5G9qv5aSqkRvZgbsKoVHgA-NB5p4f4";
 
 export default (): ExpoConfig => ({
   name: "Qubit Chat",
@@ -9,18 +13,24 @@ export default (): ExpoConfig => ({
   version: "1.0.0",
   sdkVersion: "52.0.0",
   orientation: "portrait",
-  icon: "./src/assets/images/pictorialmark.png",
+  icon: pictorialmark,
   scheme: "qubitchat",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   platforms: ["android"],
   ios: {
     bundleIdentifier: "com.pras.qubitchat",
-    googleServicesFile: "./GoogleService-Info-qubitchat.plist",
+    googleServicesFile: "./GoogleService-Info.plist",
   },
+  splash: {},
   android: {
     package: "com.pras.qubitchat",
-    googleServicesFile: "./google-services-qubitchat.json",
+    googleServicesFile: "./google-services.json",
+    adaptiveIcon: {
+      monochromeImage: pictorialmark,
+      foregroundImage: pictorialmark,
+      backgroundColor: "#120E1C",
+    },
     permissions: [
       // 📢 Microphone for voice messages & calls
       "android.permission.RECORD_AUDIO",
@@ -60,6 +70,7 @@ export default (): ExpoConfig => ({
   },
   plugins: [
     "expo-router",
+    "expo-asset",
     [
       "expo-build-properties",
       {
@@ -73,12 +84,18 @@ export default (): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        image: "./src/assets/images/pictorialmark.png",
+        image: splash,
         imageWidth: 200,
-        resizeMode: "contain",
+        resizeMode: "cover",
+        backgroundColor: "#FFFFFF",
+        dark: {
+          backgroundColor: "#120E1C",
+          image: splash,
+          imageWidth: 200,
+          resizeMode: "cover",
+        },
       },
     ],
-    "expo-font",
     [
       "expo-av",
       {

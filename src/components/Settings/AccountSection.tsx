@@ -15,6 +15,7 @@ const AccountSection = () => {
       <View className="flex felx-col gap-4">
         <View className="flex-col">
           <Pressable
+            hitSlop={2}
             onPress={async () => {
               setIsLoggingOut(true);
               await signOut();

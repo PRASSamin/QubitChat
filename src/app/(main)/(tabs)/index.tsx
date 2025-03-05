@@ -1,9 +1,9 @@
 import { useUser } from "@clerk/clerk-expo";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PRAS from "@/src/components/svg/Pras";
+import PRAS from "@/src/components/Icons/svg/Pras";
 import { useColorScheme } from "nativewind";
-import Wordmark from "@/src/components/svg/Wordmark";
+import Wordmark from "@/src/components/Icons/svg/Wordmark";
 import { ChannelList, useTheme } from "stream-chat-expo";
 import { useRouter } from "expo-router";
 import { LoadingIndicator } from "@/src/components/LoadingIndicator";

@@ -12,6 +12,7 @@ import { getLocalUser } from "./src/core/utils/getLocalUser";
 import { EstablishSocket } from "./src/core/tasks/EstablishSocket";
 import "@/src/core/tasks/EstablishSocket";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 // Background notification handler
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
@@ -56,6 +57,7 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       importance: AndroidImportance.HIGH,
       lightUpScreen: true,
       showTimestamp: true,
+      timestamp: new Date(message?.created_at!).getTime(),
       style: {
         type: AndroidStyle.MESSAGING,
         person: {
@@ -100,6 +102,7 @@ notifee.onBackgroundEvent(async ({ detail, type }) => {
   try {
     const user = await getLocalUser();
     if (!user) return;
+    await client.connectUser({ id: user?.id! }, user?.chatToken);
 
     const { notification } = detail;
     if (!notification?.data) return;
@@ -107,9 +110,7 @@ notifee.onBackgroundEvent(async ({ detail, type }) => {
     const { cid, message_id } = notification.data;
 
     if (type === EventType.PRESS) {
-      console.log("Notification Pressed");
       if (cid) {
-        console.log("Opening Channel", cid);
         Linking.openURL(`qubitchat://channel/${cid}`);
       }
     }
@@ -139,13 +140,18 @@ notifee.onBackgroundEvent(async ({ detail, type }) => {
       }
     }
   } catch (error) {
-    console.error("Error handling notification action:", error);
+    if (axios.isAxiosError(error)) {
+      console.log("Error handling notification action:", error.response);
+    } else {
+      console.log("Error handling notification action:", error);
+    }
   }
 });
 
 BackgroundFetch.registerTaskAsync("establish-websocket", {
   stopOnTerminate: false,
   startOnBoot: true,
+  minimumInterval: 300,
 });
 
 AppState.addEventListener("change", (nextAppState) => {

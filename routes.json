@@ -1,0 +1,9 @@
+[
+  "/",
+  "/+not-found",
+  "/channel/:channelId",
+  "/invite/:id",
+  "/nova",
+  "/settings",
+  "/sign-in"
+]

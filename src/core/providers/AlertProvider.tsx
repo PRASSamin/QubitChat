@@ -47,6 +47,7 @@ const AlertView: React.FC<AlertModelProps & { hideModel: () => void }> = ({
             {additionalButtons &&
               additionalButtons.map((button, i) => (
                 <TouchableOpacity
+                  hitSlop={2}
                   activeOpacity={0.7}
                   key={i}
                   onPress={() =>
@@ -62,6 +63,7 @@ const AlertView: React.FC<AlertModelProps & { hideModel: () => void }> = ({
               ))}
             <TouchableOpacity
               activeOpacity={0.7}
+              hitSlop={2}
               onPress={() => {
                 if (onConfirm) onConfirm();
                 hideModel();
@@ -363,6 +365,7 @@ const InputView: React.FC<InputModelProps & { hideModel: () => void }> = ({
                 if (isAdditionalButtonProps(button)) {
                   return (
                     <TouchableOpacity
+                      hitSlop={2}
                       key={index}
                       activeOpacity={0.7}
                       onPress={() =>

@@ -8,6 +8,7 @@ const metadata: AppMetadata = {
   package: config.android?.package,
   slug: config.slug,
   version: config.version,
+  release_label: "beta",
   supportEmail: "prassamin@gmail.com",
   platforms: config.platforms as AppMetadata["platforms"],
   author: {

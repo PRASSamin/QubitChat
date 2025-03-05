@@ -14,5 +14,5 @@
     "expo-env.d.ts",
     "nativewind-env.d.ts",
     "plugins/withAndroidManifestOverrides.js"
-  ]
+, "scripts/listRoutes.js"  ]
 }
