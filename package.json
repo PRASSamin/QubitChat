@@ -2,25 +2,32 @@
   "name": "qubitchat",
   "main": "./entry.ts",
   "version": "1.0.0",
-  "scripts": {
-    "start": "expo start --dev-client",
-    "preprebuild": "bun run clean-build",
-    "prebuild": "expo prebuild",
-    "postprebuild": "bun run mod-manifest && bun run prep-noti",
-    "build": "python3 -m scripts.build",
-    "eas-build-preinstall": "bun run postprebuild && bun run clean_fonts",
-    "reset-project": "node ./scripts/reset-project.js",
-    "mod-manifest": "python3 -m scripts.mod-manifest",
-    "prep-noti": "python3 -m scripts.prepare-notification",
-    "list-routes": "python3 -m scripts.list-routes",
-    "multi-arch": "python3 -m scripts.multi-arch-apk",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "test": "jest --watchAll",
-    "lint": "expo lint",
-    "clean-build": "rm -rf android ios"
-  },
+"scripts": {
+  "start": "expo start --dev-client",
+  "android": "expo run:android",
+  "ios": "expo run:ios",
+  "web": "expo start --web",
+
+
+  "preprebuild": "bun run clean-build",
+  "prebuild": "expo prebuild",
+  "debugbuild": "bun run preprebuild && expo prebuild && bun run mod-manifest && bun run prep-noti",
+  "postprebuild": "bun run mod-manifest && bun run prep-noti && bun run multi-arch",
+  "build": "python3 -m scripts.build",
+  "eas-build-preinstall": "bun run postprebuild",
+
+
+  "mod-manifest": "python3 -m scripts.mod-manifest",
+  "prep-noti": "python3 -m scripts.prepare-notification",
+  "list-routes": "python3 -m scripts.list-routes",
+  "multi-arch": "python3 -m scripts.multi-arch-apk",
+
+
+  "clean-build": "rm -rf android ios",
+  "reset-project": "node ./scripts/reset-project.js",
+  "test": "jest --watchAll",
+  "lint": "expo lint"
+},
   "jest": {
     "preset": "jest-expo"
   },

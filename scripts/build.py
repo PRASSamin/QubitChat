@@ -11,8 +11,8 @@ from . import ROOT, INFO, SUCCESS, ERROR, WARNING
 import json
 
 ANDROID_DIR = os.path.join(ROOT, "android")
-BUILD_OUTPUT_DIR = os.path.join(ANDROID_DIR, "app/build/outputs/apk")
-DIST_DIR = os.path.join(ROOT, "build/android")
+BUILD_OUTPUT_DIR = os.path.join(ANDROID_DIR, "app", "build", "outputs", "apk")
+DIST_DIR = os.path.join(ROOT, "build", "android")
 META_SCRIPT = os.path.join(ROOT, "extracted.js")
 
 def extract_meta():
@@ -68,9 +68,9 @@ def rename_and_move_apks(app_name, version, release_label, build_type):
 
     for apk in os.listdir(source_dir):
         if apk.endswith(".apk"):
-            arch_match = re.search(r"-(arm64-v8a|armeabi-v7a|x86|x86_64)-", apk)
-            arch_name = arch_match.group(1) if arch_match else "universal"
-            new_name = f"{app_name}-{arch_name}-{version}-{release_label}.apk"
+            arch_match = re.search(r"-(arm64-v8a|armeabi-v7a)", apk)
+            arch_name = f"-{arch_match.group(1)}" if arch_match else ""
+            new_name = f"{app_name}{arch_name}-{version}-{release_label}.apk"
 
             old_path = os.path.join(source_dir, apk)
             new_path = os.path.join(DIST_DIR, new_name)
@@ -85,10 +85,19 @@ if __name__ == "__main__":
         sys.exit(1)
 
     build_type = sys.argv[1]
+    
+    #remove dist directory
+    if os.path.exists(DIST_DIR):
+        shutil.rmtree(DIST_DIR)
+
+    #extract metadata
     app_name, version, release_label = extract_meta()
 
-    INFO(f"Starting {build_type} build for {app_name} (v{version}, {release_label})...")
+    #build apk
+    INFO(f"Starting {build_type} build for {app_name} ({version}, {release_label})...")
     build_apk(build_type)
+
+    #rename and move apks
     rename_and_move_apks(app_name, version, release_label, build_type)
 
     SUCCESS("Build process completed successfully.")

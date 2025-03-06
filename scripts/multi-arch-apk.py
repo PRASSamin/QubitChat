@@ -4,7 +4,7 @@ from . import ROOT, INFO, SUCCESS, ERROR, WARNING
 import re
 
 def add_splits_to_gradle(gradle_file_path, arch_list=None):
-    default_archs = {"armeabi-v7a", "arm64-v8a", "x86", "x86_64"}
+    default_archs = {"armeabi-v7a", "arm64-v8a"}
     
     # Merge provided architectures with the default ones
     if arch_list:
