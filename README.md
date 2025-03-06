@@ -18,7 +18,7 @@
 
 ## 📢 About QubitChat
 
-**QubitChat** is a personal chat application built with **React Native** that allows you to chat with me directly. This app is an extension of the **chatting system** from my [**website**](https://pras.ne), designed to enhance user experience by providing a seamless mobile chat interface.
+**QubitChat** is a personal chat application built with **React Native** that allows you to chat with me directly. This app is an extension of the **chatting system** from my [**website**](https://pras.me), designed to enhance user experience by providing a seamless mobile chat interface.
 
 ### 💬 Key Features:
 
